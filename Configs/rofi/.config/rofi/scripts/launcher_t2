@@ -1,0 +1,3 @@
+#!/usr/bin/env fish
+
+$HOME/.config/rofi/launchers/type-2/launcher.sh
