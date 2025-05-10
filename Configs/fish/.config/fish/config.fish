@@ -6,7 +6,7 @@ if status is-interactive
     fish_add_path ~/.local/bin
     # set -gx MANGOHUD 1
     function fish_greeting
-      fastfetch
+      # fastfetch
     end
     set -gx EDITOR nvim
     set -gx PATH $PATH $HOME/.krew/bin
@@ -50,6 +50,9 @@ if status is-interactive
     function kubecolor --wraps kubectl
       command kubecolor $argv
     end
+
+    # Initialize atuin for shell history
+    atuin init fish | source
 
     # Load oh-my-post as last step
     # oh-my-posh init fish --config ~/.config/fish/ohmyposh.toml | source
