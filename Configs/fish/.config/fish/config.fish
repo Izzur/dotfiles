@@ -51,8 +51,8 @@ if status is-interactive
       command kubecolor $argv
     end
 
-    # Initialize atuin for shell history
     atuin init fish | source
+    zoxide init fish | source
 
     # Load oh-my-post as last step
     # oh-my-posh init fish --config ~/.config/fish/ohmyposh.toml | source

@@ -20,18 +20,22 @@
         "pulseaudio",
         "bluetooth",
         "tray",
-        "clock"
+        "clock",
+        "custom/notification"
     ],
     "hyprland/workspaces": {
-    	"format": "{name} {icon} {windows}",
+      "active-only": false,
+      "all-outputs": true,
+    	"format": "{}",
     	"format-icons": {
-    		"active": "[]",
-    		"default": "[]"
+    		"active": "",
+    		"default": "",
+        "urgent": ""
     	},
-      "on-scroll-down": "hyprctl dispatch workspace r-1",
-      "on-scroll-up": "hyprctl dispatch workspace r+1",
+      "on-scroll-down": "hyprctl dispatch workspace r+1",
+      "on-scroll-up": "hyprctl dispatch workspace r-1",
       "persistent-workspaces": {
-        "*": 3
+        "*": 5
       }
     },
     "hyprland/window": {
@@ -99,6 +103,26 @@
                     "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
                     }
         }
+    },
+    "custom/notification": {
+        "tooltip": false,
+        "format": "{} {icon}",
+        "format-icons": {
+            "notification": "<span foreground='red'><sup></sup></span>",
+            "none": "",
+            "dnd-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-none": "",
+            "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "inhibited-none": "",
+            "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-inhibited-none": ""
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
