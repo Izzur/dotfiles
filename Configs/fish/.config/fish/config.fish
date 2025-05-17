@@ -20,6 +20,7 @@ if status is-interactive
     # fish_vi_key_bindings
 
     abbr --add cat bat
+    abbr --add cd z
     abbr --add df duf
     abbr --add du dust
     abbr --add ga git add
