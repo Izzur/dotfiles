@@ -63,5 +63,5 @@ end
 
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '$HOME/.config/google-cloud-sdk/path.fish.inc' ]; . '$HOME/.config/google-cloud-sdk/path.fish.inc'; end
+if [ -f "$HOME/.config/google-cloud-sdk/path.fish.inc" ]; . "$HOME/.config/google-cloud-sdk/path.fish.inc"; end
 
