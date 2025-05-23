@@ -70,6 +70,12 @@ tooltip label {
 
 #workspaces button:hover {
   background: rgba(0, 0, 0, 0.1);
+  color: lightgrey;
+  opacity: 0.7;
+}
+
+#workspaces button.active:hover {
+  background: rgba(0, 0, 0, 0.1);
   color: seagreen;
   opacity: 0.7;
 }
