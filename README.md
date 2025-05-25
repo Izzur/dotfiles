@@ -5,12 +5,12 @@
 ### Installation
 
 > [!CAUTION]
-> _**Warning**: This will overwrite your existing dotfiles_
+> _**Warning**: Backup your local dotfiles before installing new ones._
 
-For example, to install the `hyprland` dotfiles:
+For example, to install the `waybar` dotfiles into local system:
 
 ```bash
-tuckr add hyprland
+tuckr add waybar
 ```
 
 To check status of installed dotfiles:
