@@ -52,6 +52,11 @@ if status is-interactive
       command kubecolor $argv
     end
 
+    # Enable completions for zoxide
+    function z --wraps cd
+      command z $argv
+    end
+
     atuin init fish | source
     zoxide init fish | source
 
