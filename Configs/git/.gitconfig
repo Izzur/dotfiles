@@ -1,0 +1,21 @@
+[include]
+    path = ./.config/delta/themes.gitconfig
+
+[core]
+    # pager = delta
+    pager = delta --side-by-side -w ${FZF_PREVIEW_COLUMNS:-$COLUMNS}
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    # navigate = true  # use n and N to move between diff sections
+    # dark = true      # or light = true, or omit for auto-detection
+    features = arctic-fox
+    side-by-side = true
+
+[merge]
+    conflictstyle = zdiff3
+
+[init]
+	defaultBranch = main
