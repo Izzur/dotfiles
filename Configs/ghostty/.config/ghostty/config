@@ -44,6 +44,6 @@
 font-family = FiraCode Nerd Font
 font-size = 14
 gtk-tabs-location = bottom
-theme = dark:tokyonight_night,light:Monokai Pro Light Sun
+theme = TokyoNight
 window-padding-x = 8
 window-padding-y = 8
