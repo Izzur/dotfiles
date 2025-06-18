@@ -11,12 +11,16 @@
     "default_profile": "ask",
     "default_model": {
       "provider": "zed.dev",
-      "model": "claude-3-7-sonnet-latest"
+      "model": "claude-sonnet-4"
     },
-    "version": "2"
+    "play_sound_when_agent_done": true,
+    "use_modifier_to_send": true
   },
   "features": {
     "edit_prediction_provider":"supermaven"
+  },
+  "edit_predictions": {
+    "disabled_globs": ["*-env.yaml"]
   },
   "vim_mode": true,
   "ui_font_size": 16,
