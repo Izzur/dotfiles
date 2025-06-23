@@ -61,9 +61,7 @@ if status is-interactive
     zoxide init fish | source
 
     # Load oh-my-post as last step
-    # oh-my-posh init fish --config ~/.config/fish/ohmyposh.toml | source
-    # oh-my-posh init fish --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/refs/heads/main/themes/takuya.omp.json' | source
-    oh-my-posh init fish --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/refs/heads/main/themes/amro.omp.json' | source
+    oh-my-posh init fish --config '~/.config/oh-my-posh/1_shell.omp.json' | source
 end
 
 
