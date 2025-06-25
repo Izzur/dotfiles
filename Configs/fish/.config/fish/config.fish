@@ -57,7 +57,7 @@ if status is-interactive
       command z $argv
     end
 
-    atuin init fish | source
+    atuin init fish | sed 's/-k up/up/' | source
     zoxide init fish | source
 
     # Load oh-my-post as last step
