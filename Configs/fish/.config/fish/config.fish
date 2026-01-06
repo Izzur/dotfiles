@@ -34,6 +34,7 @@ if status is-interactive
     abbr --add gm git merge
     abbr --add gp git push
     abbr --add grs git restore
+    abbr --add grv git remote --verbose
     abbr --add gsh git show
     abbr --add gst git status
     abbr --add k kubecolor
