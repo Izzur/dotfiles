@@ -23,7 +23,6 @@ if status is-interactive
     abbr --add cd z
     abbr --add df duf
     abbr --add du dust
-    abbr --add ga git add
     abbr --add gb git branch
     abbr --add gco git checkout
     abbr --add gd git diff
