@@ -4,6 +4,7 @@ if status is-interactive
     # Other env loaded by /etc/profile.d/
     fish_add_path ~/.bun/bin
     fish_add_path ~/.local/bin
+    fish_add_path ~/.cache/.bun/bin
     # set -gx MANGOHUD 1
     function fish_greeting
       # fastfetch
