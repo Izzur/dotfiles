@@ -1,8 +1,39 @@
 [
   {
-    "context": "vim_mode == normal",
+    "context": "Workspace",
     "bindings": {
-      "space e": "project_panel::ToggleFocus"
-    }
-  }
+      "space f f": "file_finder::Toggle",
+      "space ;": "command_palette::Toggle",
+    },
+  },
+  {
+    "context": "Editor && vim_mode == normal",
+    "bindings": {
+      "space e": "project_panel::ToggleFocus",
+      "space x": "pane::CloseActiveItem",
+      "space /": "editor::ToggleComments",
+      "space ?": "agent::ToggleFocus",
+      "tab": [
+        "tab_switcher::Toggle",
+        {
+          "select_last": true,
+        },
+      ],
+    },
+  },
+  {
+    "context": "Editor && vim_mode == visual",
+    "bindings": {
+      "space /": "editor::ToggleComments",
+    },
+  },
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      "j j": "vim::NormalBefore",
+      "j k": "vim::NormalBefore",
+      "k j": "vim::NormalBefore",
+      "k k": "vim::NormalBefore",
+    },
+  },
 ]
