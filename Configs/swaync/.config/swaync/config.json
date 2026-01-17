@@ -26,7 +26,12 @@
   "positionX": "right",
   "positionY": "top",
   "script-fail-notify": true,
-  "scripts": {},
+  "scripts": {
+    "global-sound": {
+      "exec": "paplay /usr/share/sounds/freedesktop/stereo/service-login.oga",
+      "app-name": ".*"
+    }
+  },
   "timeout": 10,
   "timeout-critical": 0,
   "timeout-low": 5,
