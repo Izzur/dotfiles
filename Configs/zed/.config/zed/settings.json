@@ -1,38 +1,37 @@
-// Zed settings
-//
-// For information on how to configure Zed, see the Zed
-// documentation: https://zed.dev/docs/configuring-zed
-//
-// To see all of Zed's default settings without changing your
-// custom settings, run `zed: open default settings` from the
-// command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "context_servers": {
+    "mcp-server-figma": {
+      "enabled": true,
+      "settings": {
+        "figma_api_key": "xxxx_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      }
+    }
+  },
   "agent": {
+    "always_allow_tool_actions": true,
     "default_model": {
       "provider": "openrouter",
-      "model": "anthropic/claude-opus-4.5",
+      "model": "openrouter/free"
     },
-    "default_profile": "ask",
+    "default_profile": "write",
     "play_sound_when_agent_done": true,
-    "use_modifier_to_send": true,
+    "use_modifier_to_send": true
   },
   "buffer_font_size": 18.0,
   "edit_predictions": {
-    "disabled_globs": ["*-env.yaml"],
-  },
-  "features": {
-    "edit_prediction_provider": "supermaven",
+    "provider": "supermaven",
+    "disabled_globs": ["*-env.yaml"]
   },
   "icon_theme": "Colored Zed Icons Theme Dark",
   "project_panel": {
-    "hide_gitignore": true,
+    "hide_gitignore": true
   },
   "soft_wrap": "editor_width",
   "theme": {
     "mode": "system",
     "light": "Dracula Light (Alucard)",
-    "dark": "Dracula Solid",
+    "dark": "Dracula Solid"
   },
   "ui_font_size": 18.0,
-  "vim_mode": true,
+  "vim_mode": true
 }
