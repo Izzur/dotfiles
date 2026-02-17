@@ -20,7 +20,7 @@ abbr --add gst git status
 abbr --add k kubecolor
 abbr --add kctx kubectx
 abbr --add kns kubens
-abbr --add ls lsd
-abbr --add ll lsd -l
-abbr --add lla lsd -l -a
+abbr --add ls eza --icons
+abbr --add ll eza -l --icons
+abbr --add lla eza -la --icons
 abbr --add top btm

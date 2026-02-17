@@ -6,12 +6,11 @@ if status is-interactive
     fish_add_path ~/.local/bin
     fish_add_path ~/.cache/.bun/bin
     # set -gx MANGOHUD 1
-    function fish_greeting
-      # fastfetch
-    end
+
     set -gx EDITOR nvim
     set -gx PATH $PATH $HOME/.krew/bin
     set -gx MANPAGER "sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
+    set -gx STARSHIP_CONFIG "$XDG_CONFIG_HOME/starship/starship.toml"
 
     # Android SDK
     set -gx ANDROID_SDK_ROOT ~/.config/android-sdk
@@ -23,21 +22,10 @@ if status is-interactive
     # Initialize rbenv for ruby
     eval "$(rbenv init -)"
 
-    # Add alias and enable completions for "k", "kubecolor", "kubectl"
-    function kubecolor --wraps kubectl
-      command kubecolor $argv
-    end
-
-    # Enable completions for zoxide
-    function z --wraps cd
-      command z $argv
-    end
-
     atuin init fish | source
     zoxide init fish | source
-
-    # Load oh-my-post as last step
-    oh-my-posh init fish --config '~/.config/oh-my-posh/1_shell.omp.json' | source
+    starship init fish | source
+    intelli-shell init fish | source
 end
 
 
