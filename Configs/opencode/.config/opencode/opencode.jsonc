@@ -1,10 +1,10 @@
 {
+  "$schema": "https://opencode.ai/config.json",
   "plugin": [
-    "oh-my-opencode@3.5.5",
+    "oh-my-opencode@3.7.2",
     "opencode-antigravity-auth@1.5.1",
     // "@plannotator/opencode@latest",
   ],
-  "$schema": "https://opencode.ai/config.json",
   "autoupdate": true,
   "default_agent": "plan",
   "mcp": {
@@ -49,13 +49,13 @@
       "whitelist": [],
     },
     "anthropic": {
-      "whitelist": ["claude-haiku-4-5", "claude-opus-4-6", "claude-sonnet-4-5"],
+      "whitelist": ["claude-haiku-4-5", "claude-opus-4-6", "claude-sonnet-4-6"],
     },
     "github-copilot": {
       "whitelist": [
         "claude-haiku-4.5",
         "claude-opus-4.6",
-        "claude-sonnet-4.5",
+        "claude-sonnet-4.6",
         "gemini-3-flash-preview",
         "gemini-3-pro-preview",
         "gpt-5-mini",
@@ -95,16 +95,16 @@
             "high": { "thinkingLevel": "high" },
           },
         },
-        "antigravity-claude-sonnet-4-5": {
-          "name": "Claude Sonnet 4.5 (Antigravity)",
+        "antigravity-claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (Antigravity)",
           "limit": { "context": 200000, "output": 64000 },
           "modalities": {
             "input": ["text", "image", "pdf"],
             "output": ["text"],
           },
         },
-        "antigravity-claude-sonnet-4-5-thinking": {
-          "name": "Claude Sonnet 4.5 Thinking (Antigravity)",
+        "antigravity-claude-sonnet-4-6-thinking": {
+          "name": "Claude Sonnet 4.6 Thinking (Antigravity)",
           "limit": { "context": 200000, "output": 64000 },
           "modalities": {
             "input": ["text", "image", "pdf"],
@@ -115,8 +115,8 @@
             "max": { "thinkingConfig": { "thinkingBudget": 32768 } },
           },
         },
-        "antigravity-claude-opus-4-5-thinking": {
-          "name": "Claude Opus 4.5 Thinking (Antigravity)",
+        "antigravity-claude-opus-4-6-thinking": {
+          "name": "Claude Opus 4.6 Thinking (Antigravity)",
           "limit": { "context": 200000, "output": 64000 },
           "modalities": {
             "input": ["text", "image", "pdf"],
@@ -161,9 +161,9 @@
         },
       },
       "whitelist": [
-        "antigravity-claude-opus-4-5-thinking",
-        "antigravity-claude-sonnet-4-5",
-        "antigravity-claude-sonnet-4-5-thinking",
+        "antigravity-claude-opus-4-6-thinking",
+        "antigravity-claude-sonnet-4-6",
+        "antigravity-claude-sonnet-4-6-thinking",
         "antigravity-gemini-3-flash",
         "antigravity-gemini-3-pro",
         "gemini-3-flash-preview",
@@ -222,7 +222,7 @@
       "whitelist": [
         "anthropic/claude-haiku-4.5",
         "anthropic/claude-opus-4.6",
-        "anthropic/claude-sonnet-4.5",
+        "anthropic/claude-sonnet-4.6",
         "arcee-ai/trinity-large-preview:free",
         "deepseek/deepseek-v3.2",
         "google/gemini-3-flash-preview",

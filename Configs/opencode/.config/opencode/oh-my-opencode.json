@@ -2,62 +2,26 @@
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
   "auto_update": true,
   "agents": {
-    "sisyphus": {
-      "model": "nvidia/moonshotai/kimi-k2.5"
-    },
-    "hephaestus": {
-      "model": "github-copilot/gpt-5.2-codex"
-    },
-    "oracle": {
-      "model": "google/antigravity-gemini-3-pro"
-    },
-    "librarian": {
-      "model": "zai-coding-plan/glm-4.7"
-    },
-    "explore": {
-      "model": "github-copilot/grok-code-fast-1"
-    },
-    "multimodal-looker": {
-      "model": "google/antigravity-gemini-3-flash"
-    },
-    "prometheus": {
-      "model": "anthropic/claude-opus-4-6"
-    },
-    "metis": {
-      "model": "anthropic/claude-opus-4-6"
-    },
-    "momus": {
-      "model": "github-copilot/gpt-5.2"
-    },
-    "atlas": {
-      "model": "opencode/kimi-k2.5-free"
-    }
+    "sisyphus": { "model": "opencode/glm-5-free" },
+    "hephaestus": { "model": "github-copilot/gpt-5.2-codex" },
+    "oracle": { "model": "google/antigravity-gemini-3-pro" },
+    "librarian": { "model": "opencode/glm-5-free" },
+    "explore": { "model": "openrouter/x-ai/grok-code-fast-1" },
+    "multimodal-looker": { "model": "google/antigravity-gemini-3-flash" },
+    "prometheus": { "model": "anthropic/claude-opus-4-6" },
+    "metis": { "model": "anthropic/claude-opus-4-6" },
+    "momus": { "model": "anthropic/claude-opus-4-6" },
+    "atlas": { "model": "opencode/kimi-k2.5-free" }
   },
   "categories": {
-    "visual-engineering": {
-      "model": "google/gemini-3-pro-preview"
-    },
-    "ultrabrain": {
-      "model": "github-copilot/gpt-5.2-codex"
-    },
-    "deep": {
-      "model": "anthropic/claude-opus-4-6"
-    },
-    "artistry": {
-      "model": "google/antigravity-gemini-3-pro"
-    },
-    "quick": {
-      "model": "github-copilot/claude-haiku-4.5"
-    },
-    "unspecified-low": {
-      "model": "google/antigravity-claude-sonnet-4-5-thinking"
-    },
-    "unspecified-high": {
-      "model": "google/antigravity-claude-opus-4-5-thinking"
-    },
-    "writing": {
-      "model": "google/gemini-3-flash-preview"
-    }
+    "visual-engineering": { "model": "google/gemini-3-pro-preview" },
+    "ultrabrain": { "model": "github-copilot/gpt-5.2-codex" },
+    "deep": { "model": "anthropic/claude-opus-4-6" },
+    "artistry": { "model": "google/antigravity-gemini-3-pro" },
+    "quick": { "model": "openrouter/anthropic/claude-haiku-4.5" },
+    "unspecified-low": { "model": "google/antigravity-claude-sonnet-4-5-thinking" },
+    "unspecified-high": { "model": "google/antigravity-claude-opus-4-6-thinking" },
+    "writing": { "model": "google/gemini-3-flash-preview" }
   },
   "claude_code": {
     "mcp": false,
