@@ -1,8 +1,8 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "plugin": [
-    "oh-my-opencode@3.7.2",
-    "opencode-antigravity-auth@1.5.1",
+    // "oh-my-opencode@3.8.3",
+    // "opencode-antigravity-auth@1.6.0",
     // "@plannotator/opencode@latest",
   ],
   "autoupdate": true,
@@ -13,14 +13,13 @@
       "type": "remote",
       "url": "https://mcp.context7.com/mcp",
     },
-    "figma": {
+    "framelink": {
       "type": "local",
-      "command": [
-        "bunx",
-        "figma-developer-mcp",
-        "--figma-api-key={env:FIGMA_API_KEY}",
-        "--stdio",
-      ],
+      "command": ["bunx", "figma-developer-mcp", "--figma-api-key={env:FIGMA_API_KEY}", "--stdio"],
+    },
+    "shadcn": {
+      "type": "local",
+      "command": ["bunx", "shadcn@latest", "mcp"],
     },
   },
   "model": "opencode/kimi-k2.5-free",
@@ -49,7 +48,8 @@
       "whitelist": [],
     },
     "anthropic": {
-      "whitelist": ["claude-haiku-4-5", "claude-opus-4-6", "claude-sonnet-4-6"],
+      // "whitelist": ["claude-haiku-4-5", "claude-opus-4-6", "claude-sonnet-4-6"],
+      "whitelist": [],
     },
     "github-copilot": {
       "whitelist": [
@@ -57,7 +57,7 @@
         "claude-opus-4.6",
         "claude-sonnet-4.6",
         "gemini-3-flash-preview",
-        "gemini-3-pro-preview",
+        "gemini-3.1-pro-preview",
         "gpt-5-mini",
         "gpt-5.2",
         "gpt-5.2-codex",
@@ -69,12 +69,12 @@
     },
     "google": {
       "models": {
-        "antigravity-gemini-3-pro": {
-          "name": "Gemini 3 Pro (Antigravity)",
+        "antigravity-gemini-3.1-pro": {
+          "name": "Gemini 3.1 Pro (Antigravity)",
           "limit": { "context": 1048576, "output": 65535 },
           "modalities": {
             "input": ["text", "image", "pdf"],
-            "output": ["text"],
+            "output": ["text"]
           },
           "variants": {
             "low": { "thinkingLevel": "low" },
@@ -93,14 +93,6 @@
             "low": { "thinkingLevel": "low" },
             "medium": { "thinkingLevel": "medium" },
             "high": { "thinkingLevel": "high" },
-          },
-        },
-        "antigravity-claude-sonnet-4-6": {
-          "name": "Claude Sonnet 4.6 (Antigravity)",
-          "limit": { "context": 200000, "output": 64000 },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
           },
         },
         "antigravity-claude-sonnet-4-6-thinking": {
@@ -127,22 +119,6 @@
             "max": { "thinkingConfig": { "thinkingBudget": 32768 } },
           },
         },
-        "gemini-2.5-flash": {
-          "name": "Gemini 2.5 Flash (Gemini CLI)",
-          "limit": { "context": 1048576, "output": 65536 },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
-          },
-        },
-        "gemini-2.5-pro": {
-          "name": "Gemini 2.5 Pro (Gemini CLI)",
-          "limit": { "context": 1048576, "output": 65536 },
-          "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"],
-          },
-        },
         "gemini-3-flash-preview": {
           "name": "Gemini 3 Flash Preview (Gemini CLI)",
           "limit": { "context": 1048576, "output": 65536 },
@@ -162,10 +138,9 @@
       },
       "whitelist": [
         "antigravity-claude-opus-4-6-thinking",
-        "antigravity-claude-sonnet-4-6",
         "antigravity-claude-sonnet-4-6-thinking",
         "antigravity-gemini-3-flash",
-        "antigravity-gemini-3-pro",
+        "antigravity-gemini-3.1-pro",
         "gemini-3-flash-preview",
         "gemini-3-pro-preview",
       ],
@@ -226,13 +201,12 @@
         "arcee-ai/trinity-large-preview:free",
         "deepseek/deepseek-v3.2",
         "google/gemini-3-flash-preview",
-        "google/gemini-3-pro-preview",
+        "google/gemini-3.1-pro-preview",
         "minimax/minimax-m2.5",
         "moonshotai/kimi-k2-thinking",
         "moonshotai/kimi-k2.5",
         "openai/gpt-5.2",
         "openai/gpt-5.2-codex",
-        "openrouter/aurora-alpha",
         "openrouter/auto",
         "openrouter/free",
         "openrouter/sherlock-dash-alpha",

@@ -1,32 +1,30 @@
 {
-  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/dev/assets/oh-my-opencode.schema.json",
   "auto_update": true,
   "agents": {
     "sisyphus": { "model": "opencode/glm-5-free" },
-    "hephaestus": { "model": "github-copilot/gpt-5.2-codex" },
-    "oracle": { "model": "google/antigravity-gemini-3-pro" },
-    "librarian": { "model": "opencode/glm-5-free" },
-    "explore": { "model": "openrouter/x-ai/grok-code-fast-1" },
-    "multimodal-looker": { "model": "google/antigravity-gemini-3-flash" },
-    "prometheus": { "model": "anthropic/claude-opus-4-6" },
-    "metis": { "model": "anthropic/claude-opus-4-6" },
-    "momus": { "model": "anthropic/claude-opus-4-6" },
-    "atlas": { "model": "opencode/kimi-k2.5-free" }
+    "hephaestus": { "model": "opencode/glm-5-free" },
+    "oracle": { "model": "opencode/glm-5-free" },
+    "librarian": { "model": "openrouter/moonshotai/kimi-k2.5" },
+    "explore": { "model": "opencode/minimax-m2.5-free" },
+    "multimodal-looker": { "model": "openrouter/google/gemini-3.1-pro-preview" },
+    "prometheus": { "model": "opencode/glm-5-free" },
+    "metis": { "model": "opencode/glm-5-free" },
+    "momus": { "model": "opencode/glm-5-free" },
+    "atlas": { "model": "openrouter/moonshotai/kimi-k2.5" }
   },
   "categories": {
-    "visual-engineering": { "model": "google/gemini-3-pro-preview" },
-    "ultrabrain": { "model": "github-copilot/gpt-5.2-codex" },
-    "deep": { "model": "anthropic/claude-opus-4-6" },
-    "artistry": { "model": "google/antigravity-gemini-3-pro" },
-    "quick": { "model": "openrouter/anthropic/claude-haiku-4.5" },
-    "unspecified-low": { "model": "google/antigravity-claude-sonnet-4-5-thinking" },
-    "unspecified-high": { "model": "google/antigravity-claude-opus-4-6-thinking" },
-    "writing": { "model": "google/gemini-3-flash-preview" }
+    "visual-engineering": { "model": "openrouter/moonshotai/kimi-k2.5" },
+    "ultrabrain": { "model": "opencode/glm-5-free" },
+    "deep": { "model": "opencode/glm-5-free" },
+    "artistry": { "model": "openrouter/moonshotai/kimi-k2.5" },
+    "quick": { "model": "opencode/gpt-5-nano" },
+    "unspecified-low": { "model": "opencode/minimax-m2.5-free" },
+    "unspecified-high": { "model": "opencode/glm-5-free" },
+    "writing": { "model": "opencode/glm-5-free" }
   },
-  "claude_code": {
-    "mcp": false,
-    "plugins": false
-  },
+  "claude_code": { "mcp": false, "plugins": false },
   "disabled_mcps": [],
-  "disabled_skills": []
+  "disabled_skills": [],
+  "runtime_fallback": { "retry_on_errors": [400, 503, 529] }
 }
