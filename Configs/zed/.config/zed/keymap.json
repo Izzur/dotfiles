@@ -2,14 +2,15 @@
   {
     "context": "Workspace",
     "bindings": {
+      "space e": "project_panel::ToggleFocus",
       "space f f": "file_finder::Toggle",
+      "space f w": "pane::DeploySearch",
       "space ;": "command_palette::Toggle",
     },
   },
   {
     "context": "Editor && vim_mode == normal",
     "bindings": {
-      "space e": "project_panel::ToggleFocus",
       "space x": "pane::CloseActiveItem",
       "space /": "editor::ToggleComments",
       "space ?": "agent::ToggleFocus",
