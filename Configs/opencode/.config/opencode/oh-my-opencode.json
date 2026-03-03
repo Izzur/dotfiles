@@ -13,6 +13,7 @@
     "momus": { "model": "opencode/big-pickle" },
     "atlas": { "model": "opencode/big-pickle" }
   },
+  "browser_automation_engine": { "provider": "agent-browser" },
   "categories": {
     "visual-engineering": { "model": "openrouter/google/gemini-3.1-pro-preview-customtools" },
     "ultrabrain": { "model": "opencode/big-pickle" },
@@ -26,5 +27,13 @@
   "claude_code": { "mcp": false, "plugins": false },
   "disabled_mcps": [],
   "disabled_skills": [],
+  "experimental": {
+    "dynamic_context_pruning": {
+      "enabled": true,
+      "notification": "detailed",
+      "protected_tools": [ "task", "todowrite", "todoread", "lsp_rename", "session_read", "session_write", "session_search" ]
+    }
+  },
+  "hashline_edit": true,
   "runtime_fallback": { "retry_on_errors": [400, 503, 529] }
 }
