@@ -1,6 +1,4 @@
 abbr --add cat bat
-abbr --add ccusage bunx ccusage@latest
-abbr --add ccusage-opencode bunx @ccusage/opencode@latest
 abbr --add cd z
 abbr --add df duf
 abbr --add du dust

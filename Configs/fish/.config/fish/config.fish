@@ -1,5 +1,6 @@
 if status is-interactive
     # Commands to run in interactive sessions can go here
+    ulimit -n 65536
 
     # Other env loaded by /etc/profile.d/
     fish_add_path ~/.bun/bin
@@ -12,11 +13,6 @@ if status is-interactive
     set -gx MANPAGER "sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
     set -gx STARSHIP_CONFIG "$XDG_CONFIG_HOME/starship/starship.toml"
 
-    # Android SDK
-    set -gx ANDROID_SDK_ROOT ~/.config/android-sdk
-    fish_add_path $ANDROID_SDK_ROOT/cmdline-tools/latest/bin
-    fish_add_path $ANDROID_SDK_ROOT/emulator
-    fish_add_path $ANDROID_SDK_ROOT/platform-tools
     # fish_vi_key_bindings
 
     # Initialize rbenv for ruby
