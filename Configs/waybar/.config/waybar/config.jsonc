@@ -79,7 +79,8 @@
     	"format-on": " ON",
     	"format-connected": " {device_alias}",
     	"format-connected-battery": "{device_battery_percentage}%  󰥉",
-      "on-click": "overskride",
+      "on-click": "kitty bluetui",
+      "on-click-right": "kitty bluetui",
     	"tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
     	"tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
     	"tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
@@ -132,7 +133,8 @@
         "tooltip-format": "{ifname} via {gwaddr} ",
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "on-click-right": "kitty impala"
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
