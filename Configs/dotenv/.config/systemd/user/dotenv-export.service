@@ -1,0 +1,11 @@
+[Unit]
+Description=Expand $HOME in ~/.config/environment.d/dotenv.conf and export to user manager
+After=default.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c 'tr -d "\r" < "%h/.config/environment.d/dotenv.conf" | %h/.local/bin/dotenv-expand | xargs -d "\n" systemctl --user set-environment'
+
+[Install]
+WantedBy=default.target

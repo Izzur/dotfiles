@@ -1,0 +1,78 @@
+#!/bin/sh
+# dotenv-apply: apply ~/.config/environment.d/dotenv.conf to the CURRENT shell.
+# This is the single consumer that both fish and bash use so neither shell
+# maintains its own copy of env vars or PATH. You only ever edit dotenv.conf.
+#
+# Usage from bash:   eval "$(dotenv-apply)"
+# Usage from fish:   dotenv-apply | source        (emits `set -gx` when fish)
+#
+# It expands $HOME, ignores comments/blank lines, and prints export commands
+# for the calling shell. PATH is exported as-is (already fully expanded).
+#
+# Output is cached per shell and reused while it is newer than dotenv.conf.
+# The parse loop forks 3x per line (~47ms on this conf) and ran on every
+# interactive shell; the cached path is a single cat. Edit dotenv.conf and
+# the mtime check regenerates it on the next shell.
+
+CONF="${DOTENV_CONF:-$HOME/.config/environment.d/dotenv.conf}"
+[ -f "$CONF" ] || exit 0
+
+# Detect target shell from parent process / $0 fallback.
+shell="sh"
+case "${SHELL##*/}" in
+    fish) shell=fish ;;
+    bash) shell=bash ;;
+esac
+# fish passes through `| source`; allow explicit override: dotenv-apply fish
+[ -n "$1" ] && shell="$1"
+
+# Only cache the default conf. An explicit DOTENV_CONF would collide on the
+# cache key, so those callers always take the slow path.
+CACHE=""
+if [ -z "$DOTENV_CONF" ]; then
+    CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/dotenv-apply.$shell"
+    [ "$CACHE" -nt "$CONF" ] && exec cat "$CACHE"
+fi
+
+emit() {
+while IFS= read -r line || [ -n "$line" ]; do
+    case $line in
+        ''|\#*|\;*) continue ;;
+    esac
+    key=${line%%=*}
+    value=${line#*=}
+    # trim surrounding whitespace on key
+    key=$(printf '%s' "$key" | tr -d ' \t')
+    # strip one layer of matching surrounding quotes
+    case $value in
+        \"*\") value=${value#\"}; value=${value%\"} ;;
+        \'*\') value=${value#\'}; value=${value%\'} ;;
+    esac
+    # expand $HOME
+    value=$(eval "printf '%s' \"$value\"")
+    case $shell in
+        fish)
+            # escape single quotes for fish
+            esc=$(printf '%s' "$value" | sed "s/'/\\\\'/g")
+            printf "set -gx %s '%s';\n" "$key" "$esc"
+            ;;
+        *)
+            esc=$(printf '%s' "$value" | sed "s/'/'\\\\''/g")
+            printf "export %s='%s';\n" "$key" "$esc"
+            ;;
+    esac
+done < "$CONF"
+}
+
+[ -n "$CACHE" ] || { emit; exit; }
+
+# Write via tmp+rename so a concurrent shell never sources a half-written
+# cache. Any failure falls back to emitting directly -- never a partial file.
+mkdir -p "${CACHE%/*}" 2>/dev/null || { emit; exit; }
+tmp="$CACHE.tmp.$$"
+if emit > "$tmp" && mv -f "$tmp" "$CACHE"; then
+    cat "$CACHE"
+else
+    rm -f "$tmp"
+    emit
+fi

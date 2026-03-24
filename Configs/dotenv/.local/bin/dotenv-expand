@@ -1,0 +1,14 @@
+#!/bin/sh
+# dotenv-expand: read KEY=VALUE lines from stdin, expand $HOME in the value,
+# and print one expanded line per entry to stdout. Used by dotenv-export.service.
+# Lines starting with # and blank lines are ignored.
+
+while IFS= read -r line || [ -n "$line" ]; do
+    case $line in
+        ''|\#*) continue ;;
+    esac
+    key=${line%%=*}
+    value=${line#*=}
+    eval "expanded=$value"
+    printf '%s=%s\n' "$key" "$expanded"
+done
