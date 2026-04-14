@@ -1,30 +1,27 @@
+# Single source of truth: ~/.config/environment.d/dotenv.conf
+# Apply all env vars + PATH from that one file. Do NOT duplicate values here.
 if status is-interactive
-    # Commands to run in interactive sessions can go here
+    ~/.local/bin/dotenv-apply fish | source
+
     ulimit -n 65536
-
-    # Other env loaded by /etc/profile.d/
-    fish_add_path ~/.bun/bin
-    fish_add_path ~/.local/bin
-    fish_add_path ~/.cache/.bun/bin
-    # set -gx MANGOHUD 1
-
-    set -gx EDITOR nvim
-    set -gx PATH $PATH $HOME/.krew/bin
-    set -gx MANPAGER "sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
-    set -gx STARSHIP_CONFIG "$XDG_CONFIG_HOME/starship/starship.toml"
-
-    # fish_vi_key_bindings
 
     # Initialize rbenv for ruby
     eval "$(rbenv init -)"
 
+    tirith init --shell fish | source
     atuin init fish | source
     zoxide init fish | source
     starship init fish | source
     intelli-shell init fish | source
 end
 
-
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f "$HOME/.config/google-cloud-sdk/path.fish.inc" ]; . "$HOME/.config/google-cloud-sdk/path.fish.inc"; end
+if [ -f "$HOME/.config/google-cloud-sdk/path.fish.inc" ]
+    . "$HOME/.config/google-cloud-sdk/path.fish.inc"
+end
 
+# remove aliases by running `pmg setup remove` or deleting the line 
+[ -f "$HOME/.pmg.rc" ] && source "$HOME/.pmg.rc"  # PMG source aliases
+
+# remove PMG shims by running `pmg setup remove` or deleting the line
+fish_add_path --prepend "$HOME/.pmg/bin"  # PMG shims

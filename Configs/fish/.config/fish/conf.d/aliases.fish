@@ -5,6 +5,10 @@ function kubecolor --wraps kubectl
   command kubecolor $argv
 end
 
+function xo                                                                                                                                                                                     
+  xdg-open (pwd)/$argv[1]                                                                                                                                                                     
+end
+
 function y
 	set tmp (mktemp -t "yazi-cwd.XXXXXX")
 	command yazi $argv --cwd-file="$tmp"
