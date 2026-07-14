@@ -1,4 +1,32 @@
 {
+  "code_lens": "on",
+  "agent_servers": {
+    "opencode": {
+      "type": "registry"
+    },
+    "gemini": {
+      "type": "registry"
+    },
+    "cursor": {
+      "type": "registry"
+    },
+    "claude-acp": {
+      "type": "registry"
+    },
+    "codex-acp": {
+      "type": "registry"
+    }
+  },
+  "cli_default_open_behavior": "existing_window",
+  "outline_panel": {
+    "dock": "left"
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "dock": "left"
+  },
   "context_servers": {
     "mcp-server-figma": {
       "enabled": true,
@@ -8,12 +36,13 @@
     }
   },
   "agent": {
+    "dock": "right",
     "default_model": {
       "provider": "openrouter",
       "model": "openrouter/free"
     },
     "default_profile": "write",
-    "play_sound_when_agent_done": true,
+    "play_sound_when_agent_done": "always",
     "use_modifier_to_send": true
   },
   "buffer_font_size": 18.0,
@@ -23,6 +52,7 @@
   },
   "icon_theme": "Colored Zed Icons Theme Dark",
   "project_panel": {
+    "dock": "left",
     "hide_gitignore": true
   },
   "soft_wrap": "editor_width",
