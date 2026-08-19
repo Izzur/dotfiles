@@ -1,21 +1,38 @@
 #!/bin/sh
-# dotenv-apply: apply ~/.config/environment.d/dotenv.conf to the CURRENT shell.
+# dotenv-apply: apply ~/.config/environment.d/*.conf to the CURRENT shell.
 # This is the single consumer that both fish and bash use so neither shell
-# maintains its own copy of env vars or PATH. You only ever edit dotenv.conf.
+# maintains its own copy of env vars or PATH. You only ever edit those files.
 #
 # Usage from bash:   eval "$(dotenv-apply)"
 # Usage from fish:   dotenv-apply | source        (emits `set -gx` when fish)
 #
+# Every *.conf in the directory is read in lexical order, later files winning,
+# matching systemd's environment.d drop-in semantics -- so a host-specific
+# override (zz-wsl.conf) can replace PATH without forking dotenv.conf. On hosts
+# without systemd (WSL2) this script is the ONLY consumer, and it needs nothing
+# from systemd; skip the dotenv-export.service half there.
+#
 # It expands $HOME, ignores comments/blank lines, and prints export commands
 # for the calling shell. PATH is exported as-is (already fully expanded).
 #
-# Output is cached per shell and reused while it is newer than dotenv.conf.
+# Output is cached per shell and reused while it is newer than every conf.
 # The parse loop forks 3x per line (~47ms on this conf) and ran on every
-# interactive shell; the cached path is a single cat. Edit dotenv.conf and
-# the mtime check regenerates it on the next shell.
+# interactive shell; the cached path is a single cat. Edit any conf and the
+# mtime check regenerates it on the next shell.
 
-CONF="${DOTENV_CONF:-$HOME/.config/environment.d/dotenv.conf}"
-[ -f "$CONF" ] || exit 0
+# $@ becomes the conf list. DOTENV_CONF still names one explicit file, which
+# the self-check relies on; otherwise glob the drop-in directory.
+if [ -n "$DOTENV_CONF" ]; then
+    [ -f "$DOTENV_CONF" ] || exit 0
+    confs="$DOTENV_CONF"
+else
+    confs=""
+    for f in "${DOTENV_DIR:-$HOME/.config/environment.d}"/*.conf; do
+        [ -f "$f" ] && confs="$confs$f
+"
+    done
+    [ -n "$confs" ] || exit 0
+fi
 
 # Detect target shell from parent process / $0 fallback.
 shell="sh"
@@ -26,15 +43,23 @@ esac
 # fish passes through `| source`; allow explicit override: dotenv-apply fish
 [ -n "$1" ] && shell="$1"
 
-# Only cache the default conf. An explicit DOTENV_CONF would collide on the
+# Only cache the globbed default. An explicit DOTENV_CONF would collide on the
 # cache key, so those callers always take the slow path.
 CACHE=""
 if [ -z "$DOTENV_CONF" ]; then
     CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/dotenv-apply.$shell"
-    [ "$CACHE" -nt "$CONF" ] && exec cat "$CACHE"
+    # Stale if ANY conf is newer than the cache, not just the first one.
+    fresh=1
+    echo "$confs" | while IFS= read -r f; do
+        [ -n "$f" ] || continue
+        [ "$CACHE" -nt "$f" ] || exit 1
+    done || fresh=0
+    [ "$fresh" = 1 ] && exec cat "$CACHE"
 fi
 
 emit() {
+echo "$confs" | while IFS= read -r conf; do
+[ -n "$conf" ] || continue
 while IFS= read -r line || [ -n "$line" ]; do
     case $line in
         ''|\#*|\;*) continue ;;
@@ -61,7 +86,8 @@ while IFS= read -r line || [ -n "$line" ]; do
             printf "export %s='%s';\n" "$key" "$esc"
             ;;
     esac
-done < "$CONF"
+done < "$conf"
+done
 }
 
 [ -n "$CACHE" ] || { emit; exit; }

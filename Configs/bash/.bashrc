@@ -3,7 +3,9 @@
 #
 
 # Load ble.sh first of everything
-[[ $- == *i* ]] && source ~/.local/share/blesh/ble.sh --noattach
+# Guarded on the file: this .bashrc is shared with hosts that don't have ble.sh
+# installed (WSL), where an unguarded source prints an error on every shell.
+[[ $- == *i* && -f ~/.local/share/blesh/ble.sh ]] && source ~/.local/share/blesh/ble.sh --noattach
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -71,5 +73,5 @@ fi
 # remove PMG shims by running `pmg setup remove` or deleting the line
 export PATH="$HOME/.pmg/bin:$PATH"  # PMG shims
 
-# tirith.sh
-eval "$(tirith init --shell bash)"
+# tirith.sh -- guarded, not installed on every host
+command -v tirith &>/dev/null && eval "$(tirith init --shell bash)"

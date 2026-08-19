@@ -55,4 +55,14 @@ touch -d '+2 minutes' "$CACHE"
 reused=$(HOME="$TD/home" "$BIN" fish)
 [ "$reused" = "set -gx SENTINEL 'from-cache';" ] || { echo "FAIL: fresh cache not reused"; exit 1; }
 
+# Drop-ins: a lexically-later *.conf must win, and adding one must invalidate
+# the cache even though the first conf is untouched (WSL's PATH override case).
+printf 'FOO=overridden\n' > "$TD/home/.config/environment.d/zz-host.conf"
+touch -d '+3 minutes' "$TD/home/.config/environment.d/zz-host.conf"
+drop=$(HOME="$TD/home" "$BIN" fish)
+case $drop in
+    *"set -gx FOO 'bar';"*"set -gx FOO 'overridden';"*) ;;
+    *) echo "FAIL: drop-in did not override in lexical order"; printf '%s\n' "$drop"; exit 1 ;;
+esac
+
 echo "ok: all dotenv-apply cache checks passed"

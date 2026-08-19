@@ -36,6 +36,30 @@ tuckr set dotenv bash fish
 
 Then log out and back in, so the graphical session inherits the environment.
 
+#### Hosts without systemd (WSL2)
+
+`dotenv-apply` needs nothing from systemd, so the system works unchanged on a
+WSL2 distro whose PID 1 is WSL's own init and where `systemctl` isn't
+installed. The posthook detects this and skips enabling the service;
+`dotenv-export.service` is then an inert file, and the two shell rc files are
+the only consumers. There is no user manager or graphical session to push the
+environment into separately, so nothing is lost.
+
+Host-specific values live in a drop-in rather than a forked `dotenv.conf`. Any
+`*.conf` in `~/.config/environment.d/` is read in lexical order with later files
+winning — the same rule systemd's `environment.d` uses — so `zz-wsl.conf` sorts
+after `dotenv.conf` and overrides it:
+
+```bash
+tuckr set dotenv bash fish
+tuckr add dotenv-wsl          # WSL machine only
+```
+
+Read `Configs/dotenv-wsl/.config/environment.d/zz-wsl.conf` before using it. It
+needs `appendWindowsPath = false` in `/etc/wsl.conf`, because `dotenv.conf`
+exports a full literal `PATH` that would otherwise wipe WSL's injected Windows
+entries and break `clip.exe` / `explorer.exe`.
+
 Machine-specific things to review on a new host after installing:
 
 - `PATH` in `dotenv.conf` is a full literal list (no `$PATH` self-reference,
