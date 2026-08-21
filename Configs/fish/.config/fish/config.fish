@@ -1,27 +1,9 @@
-# Single source of truth: ~/.config/environment.d/dotenv.conf
-# Apply all env vars + PATH from that one file. Do NOT duplicate values here.
-if status is-interactive
-    ~/.local/bin/dotenv-apply fish | source
-
-    ulimit -n 65536
-
-    # Initialize rbenv for ruby
-    eval "$(rbenv init -)"
-
-    tirith init --shell fish | source
-    atuin init fish | source
-    zoxide init fish | source
-    starship init fish | source
-    intelli-shell init fish | source
-end
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f "$HOME/.config/google-cloud-sdk/path.fish.inc" ]
-    . "$HOME/.config/google-cloud-sdk/path.fish.inc"
-end
-
-# remove aliases by running `pmg setup remove` or deleting the line 
-[ -f "$HOME/.pmg.rc" ] && source "$HOME/.pmg.rc"  # PMG source aliases
-
-# remove PMG shims by running `pmg setup remove` or deleting the line
-fish_add_path --prepend "$HOME/.pmg/bin"  # PMG shims
+# Intentionally empty.
+#
+# Everything moved to conf.d/, which fish sources by basename in ASCII order
+# BEFORE this file. Numeric prefixes make that order explicit instead of
+# implicit in "config.fish happens to run last". See conf.d/README.md for the
+# full table and the ordering constraints behind it.
+#
+# Add new setup as its own conf.d snippet. Only put something here if it truly
+# must run after every snippet, and say why.
