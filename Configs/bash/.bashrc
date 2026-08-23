@@ -70,8 +70,10 @@ if command -v dcg &>/dev/null && command -v jq &>/dev/null; then
   fi
 fi
 
-# remove PMG shims by running `pmg setup remove` or deleting the line
-export PATH="$HOME/.pmg/bin:$PATH"  # PMG shims
+# PMG shims need no prepend here. dotenv.conf already places $HOME/.pmg/bin
+# ahead of vite-plus/bin, and bash has no equivalent of vite-plus's env.fish
+# re-prepending itself, so nothing reorders PATH after dotenv-apply runs.
+# Prepending again only produced a duplicate entry.
 
 # tirith.sh -- guarded, not installed on every host
 command -v tirith &>/dev/null && eval "$(tirith init --shell bash)"
