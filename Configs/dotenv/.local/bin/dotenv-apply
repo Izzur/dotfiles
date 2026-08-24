@@ -73,8 +73,16 @@ while IFS= read -r line || [ -n "$line" ]; do
         \"*\") value=${value#\"}; value=${value%\"} ;;
         \'*\') value=${value#\'}; value=${value%\'} ;;
     esac
-    # expand $HOME
-    value=$(eval "printf '%s' \"$value\"")
+    # Expand $HOME / ${HOME} textually. Never eval the value: environment.d is a
+    # shared drop-in directory, and eval would run any $(...) or backticks a
+    # conf contains on every interactive shell. The trailing two rules keep
+    # $HOMEBREW-style names from matching the $HOME prefix.
+    case $value in
+        *'$HOME'*|*'${HOME}'*) value=$(printf '%s' "$value" | sed \
+            -e "s|\${HOME}|$HOME|g" \
+            -e "s|\$HOME\([^A-Za-z0-9_]\)|$HOME\1|g" \
+            -e "s|\$HOME\$|$HOME|g") ;;
+    esac
     case $shell in
         fish)
             # escape single quotes for fish

@@ -65,4 +65,34 @@ case $drop in
     *) echo "FAIL: drop-in did not override in lexical order"; printf '%s\n' "$drop"; exit 1 ;;
 esac
 
+# Values are data, never shell. A conf that lands in environment.d must not be
+# able to run anything, and an unquoted value must keep its spaces instead of
+# being word-split into an empty result.
+EXP="$(dirname "$0")/dotenv-expand"
+INJ="$TD/inject.conf"
+cat > "$INJ" <<'EOF'
+SUBST=$(id -un)
+BACKTICK=`id -un`
+SPACED=hello world
+HOMEY=$HOME/x
+BRACED=${HOME}/y
+PREFIXED=$HOMEBREW/z
+EOF
+
+for pair in "SUBST:\$(id -un)" "BACKTICK:\`id -un\`" "SPACED:hello world" \
+            "HOMEY:$TD/home/x" "BRACED:$TD/home/y" "PREFIXED:\$HOMEBREW/z"; do
+    k=${pair%%:*}; want=${pair#*:}
+    got=$(HOME="$TD/home" DOTENV_CONF="$INJ" "$BIN" bash | sed -n "s/^export $k='\(.*\)';$/\1/p")
+    [ "$got" = "$want" ] || { echo "FAIL: dotenv-apply $k: want [$want] got [$got]"; exit 1; }
+
+    got=$(HOME="$TD/home" "$EXP" < "$INJ" | sed -n "s/^$k=//p")
+    [ "$got" = "$want" ] || { echo "FAIL: dotenv-expand $k: want [$want] got [$got]"; exit 1; }
+done
+
+# Both parsers must agree on comment characters, or dotenv-expand feeds junk
+# into `systemctl --user set-environment`.
+printf '; semi\n# hash\nOK=1\n' > "$TD/comments.conf"
+[ "$(HOME="$TD/home" "$EXP" < "$TD/comments.conf")" = "OK=1" ] \
+    || { echo "FAIL: dotenv-expand did not skip ; and # comments"; exit 1; }
+
 echo "ok: all dotenv-apply cache checks passed"

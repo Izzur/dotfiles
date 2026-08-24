@@ -1,14 +1,30 @@
 #!/bin/sh
 # dotenv-expand: read KEY=VALUE lines from stdin, expand $HOME in the value,
 # and print one expanded line per entry to stdout. Used by dotenv-export.service.
-# Lines starting with # and blank lines are ignored.
+# Lines starting with # or ; and blank lines are ignored.
+#
+# Parsing must match dotenv-apply: same comment characters, same one-layer
+# quote strip, same textual $HOME expansion. Never eval the value -- that would
+# both execute any $(...) a conf contains and split unquoted values on spaces,
+# emitting an empty value into `systemctl --user set-environment`.
 
 while IFS= read -r line || [ -n "$line" ]; do
     case $line in
-        ''|\#*) continue ;;
+        ''|\#*|\;*) continue ;;
     esac
     key=${line%%=*}
     value=${line#*=}
-    eval "expanded=$value"
-    printf '%s=%s\n' "$key" "$expanded"
+    key=$(printf '%s' "$key" | tr -d ' \t')
+    # strip one layer of matching surrounding quotes
+    case $value in
+        \"*\") value=${value#\"}; value=${value%\"} ;;
+        \'*\') value=${value#\'}; value=${value%\'} ;;
+    esac
+    case $value in
+        *'$HOME'*|*'${HOME}'*) value=$(printf '%s' "$value" | sed \
+            -e "s|\${HOME}|$HOME|g" \
+            -e "s|\$HOME\([^A-Za-z0-9_]\)|$HOME\1|g" \
+            -e "s|\$HOME\$|$HOME|g") ;;
+    esac
+    printf '%s=%s\n' "$key" "$value"
 done
