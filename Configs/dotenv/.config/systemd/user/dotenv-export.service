@@ -1,11 +1,22 @@
 [Unit]
-Description=Expand $HOME in ~/.config/environment.d/dotenv.conf and export to user manager
-After=default.target
+Description=Expand $HOME in ~/.config/environment.d/*.conf and export to user manager
+# systemctl --user set-environment only reaches services started AFTER it runs,
+# so this has to be ordered ahead of the graphical stack rather than after
+# default.target. The old After=default.target left it racing the compositor and
+# it won by a few seconds purely because the compositor is slow to start.
+# Ordering is a no-op on a host that never pulls in a graphical session, so the
+# TTY-only case is unaffected.
+Before=graphical-session-pre.target
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/bin/sh -c 'tr -d "\r" < "%h/.config/environment.d/dotenv.conf" | %h/.local/bin/dotenv-expand | xargs -d "\n" systemctl --user set-environment'
+# Read every *.conf, not just dotenv.conf: shells glob the whole directory, and
+# reading only the base file made drop-ins (zz-wsl.conf) apply to shells but not
+# to GUI apps. The shell glob sorts lexically, which is the override order
+# dotenv-apply and systemd's own environment.d reader both use.
+# xargs -r keeps an empty directory from calling set-environment with no args.
+ExecStart=/bin/sh -c 'cat "%h"/.config/environment.d/*.conf | tr -d "\r" | "%h"/.local/bin/dotenv-expand | xargs -r -d "\n" systemctl --user set-environment'
 
 [Install]
 WantedBy=default.target
