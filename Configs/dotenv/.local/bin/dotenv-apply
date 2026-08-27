@@ -48,12 +48,23 @@ esac
 CACHE=""
 if [ -z "$DOTENV_CONF" ]; then
     CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/dotenv-apply.$shell"
-    # Stale if ANY conf is newer than the cache, not just the first one.
+    # The mtime check alone only catches a conf that CHANGED. Removing one
+    # leaves every survivor older than the cache, so its variables would be
+    # served forever -- exactly the "moved off WSL, deleted zz-wsl.conf" case.
+    # Record the conf list in the cache and treat any difference as stale. A
+    # leading # is a comment in both bash and fish, so the header is inert when
+    # the cache is sourced.
+    # printf, not echo: echo appends a newline that tr turns into a second
+    # trailing space, making the header awkward to reproduce exactly.
+    header="# confs:$(printf '%s' "$confs" | tr '\n' ' ')"
     fresh=1
-    echo "$confs" | while IFS= read -r f; do
-        [ -n "$f" ] || continue
-        [ "$CACHE" -nt "$f" ] || exit 1
-    done || fresh=0
+    [ "$(head -n 1 "$CACHE" 2>/dev/null)" = "$header" ] || fresh=0
+    if [ "$fresh" = 1 ]; then
+        echo "$confs" | while IFS= read -r f; do
+            [ -n "$f" ] || continue
+            [ "$CACHE" -nt "$f" ] || exit 1
+        done || fresh=0
+    fi
     [ "$fresh" = 1 ] && exec cat "$CACHE"
 fi
 
@@ -104,7 +115,7 @@ done
 # cache. Any failure falls back to emitting directly -- never a partial file.
 mkdir -p "${CACHE%/*}" 2>/dev/null || { emit; exit; }
 tmp="$CACHE.tmp.$$"
-if emit > "$tmp" && mv -f "$tmp" "$CACHE"; then
+if { printf '%s\n' "$header"; emit; } > "$tmp" && mv -f "$tmp" "$CACHE"; then
     cat "$CACHE"
 else
     rm -f "$tmp"

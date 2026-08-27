@@ -32,9 +32,13 @@ cp "$CONF" "$TD/home/.config/environment.d/dotenv.conf"
 # Same HOME as the cached runs, or $HOME expansion differs and nothing matches.
 ref=$(HOME="$TD/home" DOTENV_CONF="$CONF" "$BIN" fish)
 
-cold=$(HOME="$TD/home" "$BIN" fish)
+# Cached runs carry a "# confs:" header naming the conf list; the uncached
+# reference has none. Strip it so the comparison is about the emitted vars.
+body() { grep -v '^# confs:'; }
+
+cold=$(HOME="$TD/home" "$BIN" fish | body)
 [ -f "$CACHE" ] || { echo "FAIL: cache not created at $CACHE"; exit 1; }
-warm=$(HOME="$TD/home" "$BIN" fish)
+warm=$(HOME="$TD/home" "$BIN" fish | body)
 
 [ "$cold" = "$ref" ]  || { echo "FAIL: cold != uncached"; printf '%s\n--\n%s\n' "$cold" "$ref"; exit 1; }
 [ "$warm" = "$ref" ]  || { echo "FAIL: warm != uncached"; printf '%s\n--\n%s\n' "$warm" "$ref"; exit 1; }
@@ -50,10 +54,14 @@ after=$(HOME="$TD/home" "$BIN" fish)
 case $after in *"set -gx NEWKEY 'added';"*) ;; *) echo "FAIL: stale cache served after edit"; exit 1 ;; esac
 
 # A cache newer than the conf must actually be reused, not silently regenerated.
-printf "set -gx SENTINEL 'from-cache';\n" > "$CACHE"
+# The header naming the conf list has to match, or the cache counts as stale.
+HDR="# confs:$TD/home/.config/environment.d/dotenv.conf "
+printf '%s\n' "$HDR" > "$CACHE"
+printf "set -gx SENTINEL 'from-cache';\n" >> "$CACHE"
 touch -d '+2 minutes' "$CACHE"
 reused=$(HOME="$TD/home" "$BIN" fish)
-[ "$reused" = "set -gx SENTINEL 'from-cache';" ] || { echo "FAIL: fresh cache not reused"; exit 1; }
+[ "$reused" = "$HDR
+set -gx SENTINEL 'from-cache';" ] || { echo "FAIL: fresh cache not reused"; printf '%s\n' "$reused"; exit 1; }
 
 # Drop-ins: a lexically-later *.conf must win, and adding one must invalidate
 # the cache even though the first conf is untouched (WSL's PATH override case).
@@ -64,6 +72,18 @@ case $drop in
     *"set -gx FOO 'bar';"*"set -gx FOO 'overridden';"*) ;;
     *) echo "FAIL: drop-in did not override in lexical order"; printf '%s\n' "$drop"; exit 1 ;;
 esac
+
+# REMOVING a drop-in must invalidate too. Push the cache ahead of every
+# surviving conf first, so the mtime check would happily serve it and only the
+# conf list in the header can notice the file is gone. Without that touch this
+# assertion passes for the wrong reason.
+rm "$TD/home/.config/environment.d/zz-host.conf"
+touch -d '+5 minutes' "$CACHE"
+gone=$(HOME="$TD/home" "$BIN" fish)
+case $gone in
+    *"overridden"*) echo "FAIL: deleted drop-in still served from cache"; printf '%s\n' "$gone"; exit 1 ;;
+esac
+case $gone in *"set -gx FOO 'bar';"*) ;; *) echo "FAIL: base conf lost after drop-in removal"; exit 1 ;; esac
 
 # Values are data, never shell. A conf that lands in environment.d must not be
 # able to run anything, and an unquoted value must keep its spaces instead of
