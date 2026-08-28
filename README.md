@@ -19,13 +19,30 @@ To check status of installed dotfiles:
 tuckr status
 ```
 
+### Git (`git` group)
+
+`.gitconfig` includes `~/.config/delta/themes.gitconfig` and selects the
+`arctic-fox` theme from it, so the `delta` group has to be installed alongside
+it or delta starts with an unknown theme:
+
+```bash
+tuckr add git delta
+```
+
 ### Environment variables (`dotenv` group)
 
 `Configs/dotenv` holds the single source of truth for user environment variables
 and `PATH`: `~/.config/environment.d/dotenv.conf`. Three consumers read that one
 file — systemd's native `environment.d` reader, `dotenv-export.service` (pushes
 the `$HOME`-expanded values into the systemd user manager so GUI apps see them),
-and `dotenv-apply` (emits `export`/`set -gx` for bash and fish).
+and `dotenv-apply` (emits `export`/`set -gx` for bash and fish). All three read
+every `*.conf` in the directory, in lexical order with later files winning.
+
+Values are data, not shell. Both parsers strip one layer of matching surrounding
+quotes and substitute `$HOME` / `${HOME}`; nothing else is interpreted. Write a
+value exactly as the receiving program should see it and do not shell-escape it
+— `environment.d` is a shared drop-in directory, so a value that got `eval`ed
+would run whatever any file there contained on every interactive shell.
 
 Because the service has to be enabled, this group needs `set` rather than `add`
 so its posthook runs:
