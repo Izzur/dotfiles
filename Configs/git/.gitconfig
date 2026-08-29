@@ -2,12 +2,14 @@
     path = ./.config/delta/themes.gitconfig
 
 [core]
-    # No -w: COLUMNS is a shell variable, not exported, so the pager subshell
-    # git spawns saw an empty width and delta exited with
+    # No -w at all. Delta measures the terminal itself; passing a width only
+    # makes things worse here. COLUMNS is a shell variable and is not exported,
+    # so the pager subshell git spawns saw an empty value and delta exited with
     #   "a value is required for '--width <N>'".
-    # Delta detects the terminal width itself; only fzf previews need a value,
-    # and 0 there means "auto" rather than empty.
-    pager = delta --side-by-side -w ${FZF_PREVIEW_COLUMNS:-0}
+    # -w 0 is not "auto" either: delta takes it literally and renders columns of
+    # zero width, so a real diff prints as blank lines and looks like no diff.
+    # side-by-side lives in [delta] below, so nothing is needed on this line.
+    pager = delta
 
 [interactive]
     diffFilter = delta --color-only
